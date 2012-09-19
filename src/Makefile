@@ -174,6 +174,7 @@ APIS = \
 	webkit.cs		\
 	composer.cs		\
 	scriptingbridge.cs		\
+	sparkle.cs              \
 	$(SHARED_APIS)
 
 all: $(TARGETS)
