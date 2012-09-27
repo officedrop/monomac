@@ -14,28 +14,21 @@ namespace MonoMac.Sparkle {
 		void FetchAppcastFromURL (NSUrl url);
 
 		[Export ("setDelegate:")]
-		void SetDelegate ();
+		void SetDelegate (NSObject delegateHandler);
 
 		[Export ("setUserAgentString:")]
 		void SetUserAgentString (string userAgentString);
 
 		[Export ("items")]
-		NSArray Items ();
-
+		SUAppcastItem[] Items {[Bind("items")] get;}
 	}
 
 	[BaseType (typeof (NSObject))]
 	interface SUUpdater {
-		[Static]
-		[Export ("sharedUpdater")]
-		SUUpdater SharedUpdater ();
 
 		[Static]
 		[Export ("updaterForBundle:")]
 		SUUpdater UpdaterForBundle (NSBundle bundle);
-
-		[Export ("hostBundle")]
-		NSBundle HostBundle ();
 
 		[Export ("setDelegate:")]
 		void SetDelegate (NSObject delegateHandler);
@@ -46,8 +39,8 @@ namespace MonoMac.Sparkle {
 		[Export ("checkForUpdatesInBackground")]
 		void CheckForUpdatesInBackground ();
 
-		[Export ("lastUpdateCheckDate")]
-		NSDate LastUpdateCheckDate ();
+		[Export ("hostBundle")]
+		NSBundle HostBundle { [Bind("hostBundle")] get;}
 
 		[Export ("checkForUpdateInformation")]
 		void CheckForUpdateInformation ();
@@ -55,10 +48,16 @@ namespace MonoMac.Sparkle {
 		[Export ("resetUpdateCycle")]
 		void ResetUpdateCycle ();
 
-		[Export ("updateInProgress")]
-		bool UpdateInProgress ();
+		[Export ("lastUpdateCheckDate")]
+		NSDate LastUpdateCheckDate { [Bind("lastUpdateCheckDate")] get; }
 
-		//Detected properties
+		[Static]
+		[Export ("sharedUpdater")]
+		SUUpdater SharedUpdater { [Bind("sharedUpdater")] get;}
+
+		[Export ("updateInProgress")]
+		bool UpdateInProgress  { [Bind("updateInProgress")] get;}
+
 		[Export ("automaticallyChecksForUpdates")]
 		bool AutomaticallyChecksForUpdates { get; set; }
 
@@ -79,37 +78,37 @@ namespace MonoMac.Sparkle {
 	[BaseType (typeof (NSObject))]
 	interface SUAppcastItem {
 		[Export ("dict")]
-		NSDictionary Dict ();
+		NSDictionary Dict { [Bind("dict")] get; }
 
 		[Export ("title")]
-		string Title ();
+		string Title { [Bind("title")] get; }
 
 		[Export ("versionString")]
-		string VersionString ();
+		string VersionString { [Bind("versionString")] get; }
 
 		[Export ("displayVersionString")]
-		string DisplayVersionString ();
+		string DisplayVersionString { [Bind("displayVersionString")] get; }
 
 		[Export ("date")]
-		NSDate Date ();
+		NSDate Date { [Bind("date")] get; }
 
 		[Export ("itemDescription")]
-		string ItemDescription ();
+		string ItemDescription { [Bind("itemDescription")] get; }
 
 		[Export ("releaseNotesURL")]
-		NSUrl ReleaseNotesURL ();
+		NSUrl ReleaseNotesURL { [Bind("releaseNotesURL")] get; }
 
 		[Export ("fileURL")]
-		NSUrl FileURL ();
+		NSUrl FileURL { [Bind("fileURL")] get; }
 
 		[Export ("DSASignature")]
-		string DSASignature ();
+		string DSASignature { [Bind("DSASignature")] get; }
 
 		[Export ("minimumSystemVersion")]
-		string MinimumSystemVersion ();
+		string MinimumSystemVersion { [Bind("minimumSystemVersion")] get; }
 
 		[Export ("propertiesDictionary")]
-		NSDictionary PropertiesDictionary ();
+		NSDictionary PropertiesDictionary { [Bind("propertiesDictionary")] get; }
 
 	}	
 
