@@ -121,6 +121,96 @@ namespace MonoMac.Sparkle {
 
 	}
 
+	[BaseType (typeof (NSObject))]
+	interface SUUnarchiver {
+
+		[Export("setDelegate:")]
+		void SetDelegate( NSObject delegateHandler );
+
+		[Export("start")]
+		void Start();
+
+		[Static]
+		[Export("unarchiverForPath:updatingHost:")]
+		SUUnarchiver UnarchiverForPath( string path, SUHost host );
+
+	}
+
+	[BaseType (typeof (NSObject))]
+	interface SUHost {
+
+		[Static]
+		[Export("systemVersionString")]
+		string SystemVersionString { [Bind("systemVersionString")] get; }
+
+		[Export("bundle")]
+		NSBundle Bundle { [Bind("bundle")] get; }
+
+		[Export("bundlePath")]
+		string BundlePath { [Bind("bundlePath")] get; }
+
+		[Export("appSupportPath")] 
+		string AppSupportPath { [Bind("appSupportPath")] get; }
+
+		[Export("installationPath")]
+		string InstallationPath { [Bind("installationPath")] get;}
+
+		[Export("name")]
+		string Name { [Bind("name")] get; }
+
+		[Export("version")]
+		string Version {[Bind("version")] get;}
+
+		[Export("displayVersion")]
+		string DisplayVersion {[Bind("displayVersion")] get;}
+
+		[Export("icon")]
+		NSImage Icon {[Bind("icon")] get;}
+
+		[Export("isRunningOnReadOnlyVolume")]
+		bool RunningOnReadOnlyVolume {
+			[Bind("isRunningOnReadOnlyVolume")] get;
+		}
+
+		[Export("isBackgroundApplication")] 
+		bool BackgroundApplication {
+			[Bind("isBackgroundApplication")] get;
+		}
+
+		[Export("publicDSAKey")]
+		string PublicDSAKey {
+			[Bind("publicDSAKey")] get;
+		}
+
+		[Export("systemProfile")]
+		NSArray SystemProfile { [Bind("systemProfile")] get; }
+
+		[Export("objectForInfoDictionaryKey:")]
+		NSObject ObjectForInfoDictionaryKey( string key );
+
+		[Export("boolForInfoDictionaryKey:")]
+		bool BoolForInfoDictionaryKey( string key );
+
+		[Export("objectForUserDefaultsKey:")]
+		NSObject ObjectForUserDefaultsKey( string key );
+
+		[Export("setObject:forUserDefaultsKey:")]
+		void SetObjectForUserDefaults( NSObject value, string key );
+
+		[Export("boolForUserDefaultsKey:")]
+		bool BoolForUserDefaultsKey(string key);
+
+		[Export("setBool:forUserDefaultsKey:")]
+		void SetBoolForUserDefaultsKey( bool value, string key );
+
+		[Export("objectForKey")]
+		NSObject ObjectForKey( string key );
+
+		[Export("boolForKey")]
+		bool BoolForKey( string key );
+
+	}
+
 	/*Sparkle uses an informal delegate protocol for it's delegates as follows
 
 	interface NSObject {

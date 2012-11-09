@@ -27,6 +27,7 @@
 // Copyright 2009 Novell, Inc
 //
 using System;
+using System.Threading;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -89,6 +90,7 @@ namespace MonoMac.ObjCRuntime {
 
 		internal static Type Lookup (IntPtr klass) {
 			// FAST PATH
+
 			Type type;
 			if (type_map.TryGetValue (klass, out type))
 				return type;
@@ -102,9 +104,17 @@ namespace MonoMac.ObjCRuntime {
 			do {
 				IntPtr kls = class_getSuperclass (klass);
 
+
 				if (type_map.TryGetValue (kls, out type)) {
 					type_map [orig_klass] = type;
 					return type;
+				}
+
+				if ( kls == IntPtr.Zero ) {
+					var message = "Could not find a valid superclass for type " + new Class(orig_klass).Name 
+					+  ". Did you forget to register the bindings at " + typeof(Class).FullName
+					+  ".Register() or call NSApplication.Init()?";
+					throw new ArgumentException(message);
 				}
 
 				klass = kls;

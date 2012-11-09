@@ -6026,6 +6026,9 @@ namespace MonoMac.AppKit {
 		int RunModal (string [] types);
 	}
 
+	[BaseType(typeof(NSOpenPanel))]
+	public interface NSRemoteOpenPanel {}
+
 	[BaseType (typeof (NSObject))]
 	[Model]
 	public interface NSOpenSavePanelDelegate {
@@ -8973,6 +8976,9 @@ namespace MonoMac.AppKit {
 		[Export ("runModalForDirectory:file:")]
 		int RunModal ([NullAllowed] string directory, [NullAllowed]  string filename);
 	}
+
+	[BaseType(typeof(NSSavePanel))]
+	public interface NSRemoteSavePanel {}
 
 	[BaseType (typeof (NSObject))]
 	public interface NSScreen {
