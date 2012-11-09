@@ -1113,6 +1113,48 @@ namespace MonoMac.AppKit {
 		
 		[Export ("representationUsingType:properties:")]
 		NSData RepresentationUsingTypeProperties(NSBitmapImageFileType storageType, NSDictionary properties);
+
+		[Field ("NSImageCompressionMethod")]
+		NSString CompressionMethod { get; }
+
+		[Field ("NSImageCompressionFactor")]
+		NSString CompressionFactor { get; }
+
+		[Field ("NSImageDitherTransparency")]
+		NSString DitherTransparency { get; }
+
+		[Field ("NSImageRGBColorTable")]
+		NSString RGBColorTable { get; }
+
+		[Field ("NSImageInterlaced")]
+		NSString Interlaced { get; }
+
+		[Field ("NSImageColorSyncProfileData")]
+		NSString ColorSyncProfileData { get; }
+
+		[Field ("NSImageFrameCount")]
+		NSString FrameCount { get; }
+
+		[Field ("NSImageCurrentFrame")]
+		NSString CurrentFrame { get; }
+
+		[Field ("NSImageCurrentFrameDuration")]
+		NSString CurrentFrameDuration { get; }
+
+		[Field ("NSImageLoopCount")]
+		NSString LoopCount { get; }
+
+		[Field ("NSImageGamma")]
+		NSString Gamma { get; }
+
+		[Field ("NSImageProgressive")]
+		NSString Progressive { get; }
+
+		[Field ("NSImageEXIFData")]
+		NSString EXIFData { get; }
+
+		[Field ("NSImageFallbackBackgroundColor")]
+		NSString FallbackBackgroundColor { get; }
 	}
 
 	[BaseType (typeof (NSView))]
@@ -3119,6 +3161,9 @@ namespace MonoMac.AppKit {
 		[Export ("stringValue")]
 		string StringValue { get; set; }
 
+		[Export ("attributedStringValue")]
+		NSAttributedString AttributedStringValue { get; set; }
+
 		[Export ("intValue")]
 		int IntValue { get; set; }
 
@@ -4185,7 +4230,7 @@ namespace MonoMac.AppKit {
 
 		[Static]
 		[Export ("fontWithDescriptor:textTransform:")]
-		NSFont FromDescription (NSFontDescriptor fontDescriptor, NSAffineTransform textTransform);
+		NSFont FromDescription (NSFontDescriptor fontDescriptor, [NullAllowed] NSAffineTransform textTransform);
 
 		[Static]
 		[Export ("userFontOfSize:")]
@@ -10811,6 +10856,57 @@ namespace MonoMac.AppKit {
 
 		[Export ("noteFocusRingMaskChanged")]
 		void NoteFocusRingMaskChanged ();
+		
+		[Export ("dataWithEPSInsideRect:")]
+		NSData DataWithEpsInsideRect (RectangleF rect);
+	
+		[Export ("dataWithPDFInsideRect:")]
+		NSData DataWithPdfInsideRect (RectangleF rect);
+	
+		[Export ("print:")]
+		void Print (NSObject sender);
+		
+		[Export ("printJobTitle")]
+		string PrintJobTitle { get; }
+		
+		[Export ("pageHeader")]
+		NSAttributedString PageHeader { get; }
+
+		[Export ("pageFooter")]
+		NSAttributedString PageFooter { get; }
+
+		[Export ("writeEPSInsideRect:toPasteboard:")]
+		void WriteEpsInsideRect (RectangleF rect, NSPasteboard pboard);
+
+		[Export ("writePDFInsideRect:toPasteboard:")]
+		void WritePdfInsideRect (RectangleF rect, NSPasteboard pboard);
+		
+		[Export ("drawPageBorderWithSize:")]
+		void DrawPageBorder (SizeF borderSize);
+		
+		[Export ("drawSheetBorderWithSize:")]
+		void DrawSheetBorder (SizeF borderSize);
+		
+		[Export ("heightAdjustLimit")]
+		float HeightAdjustLimit { get; }
+		
+		[Export ("widthAdjustLimit")]
+		float WidthAdjustLimit { get; }
+		
+		[Export ("adjustPageWidthNew:left:right:limit:")]
+		void AdjustPageWidthNew (float newRight, float left, float proposedRight, float rightLimit);
+		
+		[Export ("adjustPageHeightNew:top:bottom:limit:")]
+		void AdjustPageHeightNew (float newBottom, float top, float proposedBottom, float bottomLimit);
+		
+		[Export ("knowsPageRange:")]
+		bool KnowsPageRange (ref NSRange aRange);
+		
+		[Export ("rectForPage:")]
+		RectangleF RectForPage (int pageNumber);
+		
+		[Export ("locationOfPrintRect:")]
+		PointF LocationOfPrintRect (RectangleF aRect);
 	}
 
 	[BaseType (typeof (NSAnimation))]
