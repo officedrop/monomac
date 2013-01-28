@@ -46,10 +46,20 @@ namespace macdoc
 				return "Mono Documentation Browser";
 			}
 		}
+
+		public void LoadWithSearch (string searchTerm)
+		{
+			if (!string.IsNullOrEmpty (searchTerm)) {
+				toolbarSearchEntry.StringValue = searchTerm;
+				tabSelector.SelectAt (2);
+				Search (searchTerm);
+				Logger.Log ("Searched: '{0}'", searchTerm);
+			}
+		}
 		
 		public override bool ReadFromUrl (NSUrl url, string typeName, out NSError outError)
 		{
-			Console.WriteLine ("ReadFromUrl : {0}", url.ToString ());
+			Logger.Log ("ReadFromUrl: {0}", url.ToString ());
 			outError = null;
 
 			// if scheme is not right, we ignore the url
@@ -113,7 +123,7 @@ namespace macdoc
 		{
 			outlineView.DataSource = new DocTreeDataSource (this);
 			outlineView.Delegate = new OutlineDelegate (this);
-			if (AppDelegate.IsOnLion)
+			if (AppDelegate.IsOnLionOrBetter)
 				outlineView.EnclosingScrollView.HorizontalScrollElasticity = outlineView.EnclosingScrollView.VerticalScrollElasticity = NSScrollElasticity.None;
 		}
 		
@@ -145,7 +155,7 @@ namespace macdoc
 		
 		void SetupBookmarks ()
 		{
-			if (!AppDelegate.IsOnLion){
+			if (!AppDelegate.IsOnLionOrBetter){
 				addBookmarkBtn.Hidden = true;
 				
 				viewBookmarksBtn.Hidden = true;
@@ -232,16 +242,14 @@ namespace macdoc
 		
 		internal void LoadUrl (string url, bool syncTreeView = false, HelpSource source = null, bool addToHistory = true)
 		{
-			if (url.StartsWith ("#")) {
-				Console.WriteLine ("FIXME: Anchor jump");
+			if (url.StartsWith ("#"))
 				return;
-			}
 			// In case user click on an external link e.g. [Android documentation] link at bottom of MonoDroid docs
 			if (url.StartsWith ("http://")) {
 				UrlLauncher.Launch (url);
 				return;
 			}
-			Console.WriteLine ("Loading {0}", url);
+			Logger.Log ("Loading {0}", url);
 			var ts = Interlocked.Increment (ref loadUrlTimestamp);
 			Task.Factory.StartNew (() => {
 				Node node;
@@ -255,7 +263,7 @@ namespace macdoc
 						if (ts < loadUrlTimestamp)
 							return;
 						currentUrl = node == null ? url : node.PublicUrl;
-						if (AppDelegate.IsOnLion)
+						if (AppDelegate.IsOnLionOrBetter)
 							InvalidateRestorableState ();
 						if (addToHistory)
 							history.AppendHistory (new LinkPageVisit (this, currentUrl));
@@ -377,10 +385,12 @@ namespace macdoc
 		partial void StartSearch (NSSearchField sender)
 		{
 			var contents = sender.StringValue;
-			if (contents == null || contents == "")
+			if (string.IsNullOrEmpty (contents))
 				return;
 			tabSelector.SelectAt (2);
 			Search (contents);
+			// Unselect the search term in case user is typing slowly
+			sender.CurrentEditor.SelectedRange = new NSRange (contents.Length, 0);
 		}
 		
 		// Typing in the index panel
@@ -528,7 +538,7 @@ namespace macdoc
 					return;
 				
 				var node = WrapNode.FromObject (parent.outlineView.ItemAtRow ((int) indexes.FirstIndex));
-				parent.LoadUrl (node.PublicUrl, false, node.tree.HelpSource);
+				parent.LoadUrl (node.PublicUrl, false, node.Tree.HelpSource);
 			}
 		}
 

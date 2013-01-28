@@ -140,6 +140,7 @@ namespace MonoMac.QTKit
 	}
 
 	[BaseType (typeof (NSObject), Name="QTCaptureDecompressedVideoOutput_Delegate")]
+	[Model]
 	interface QTCaptureDecompressedVideoOutputDelegate {
 		[Export ("captureOutput:didOutputVideoFrame:withSampleBuffer:fromConnection:"), EventArgs ("QTCaptureVideoFrame")]
 		void DidOutputVideoFrame (QTCaptureOutput captureOutput, CVImageBuffer videoFrame, QTSampleBuffer sampleBuffer, QTCaptureConnection connection);
@@ -149,6 +150,7 @@ namespace MonoMac.QTKit
 	}
 
 	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor] // An uncaught exception was raised: Cannot instantiate a QTCaptureDevice directly.
 	interface QTCaptureDevice {
 		[Static]
 		[Export ("inputDevices")]
@@ -262,7 +264,9 @@ namespace MonoMac.QTKit
 	}
 
 	[BaseType (typeof (QTCaptureInput))]
+	[DisableDefaultCtor] // crash without warning
 	interface QTCaptureDeviceInput {
+		[Static]
 		[Export ("deviceInputWithDevice:")]
 		QTCaptureDeviceInput FromDevice (QTCaptureDevice device);
 
@@ -274,6 +278,7 @@ namespace MonoMac.QTKit
 	}
 
 	[BaseType (typeof (QTCaptureOutput), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (QTCaptureFileOutputDelegate)})]
+	[DisableDefaultCtor] // crash without warning
 	interface QTCaptureFileOutput {
 		[Export ("outputFileURL")]
 		NSUrl OutputFileUrl { get; }
@@ -358,6 +363,7 @@ namespace MonoMac.QTKit
 	}
 
 	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor] // An uncaught exception was raised: Cannot instantiate QTCaptureInput because it is an abstract superclass.
 	interface QTCaptureInput {
 		[Export ("connections")]
 		QTCaptureConnection [] Connections { get; }
@@ -382,6 +388,7 @@ namespace MonoMac.QTKit
 	}
 
 	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor] // An uncaught exception was raised: Cannot instantiate QTCaptureOutput because it is an abstract superclass.
 	interface QTCaptureOutput {
 		[Export ("connections")]
 		QTCaptureConnection [] Connections { get; }
@@ -460,6 +467,7 @@ namespace MonoMac.QTKit
 
 	[BaseType (typeof (NSObject))]
 	interface QTCompressionOptions {
+		[Static]
 		[Export ("compressionOptionsIdentifiersForMediaType:")]
 		string [] GetCompressionOptionsIdentifiers (string forMediaType);
 
@@ -850,7 +858,7 @@ namespace MonoMac.QTKit
 		string[] MovieUnfilteredPasteboardTypes ();
 
 		[Static, Export ("movieTypesWithOptions:")]
-		string[] MovieTypesWithOptions ([Target] QTMovie qTMovieInitialization, QTMovieFileTypeOptions types);
+		string[] MovieTypesWithOptions (QTMovieFileTypeOptions types);
 
 		[Static, Export ("movie")]
 		QTMovie Movie { get; }
@@ -904,8 +912,9 @@ namespace MonoMac.QTKit
 		[Export ("initWithAttributes:error:")]
 		IntPtr Constructor (NSDictionary attributes, out NSError error);
 
-		[Static, Export ("movieWithTimeRange:error:")]
-		QTMovie FromTimeRange (QTTimeRange range, out NSError error);
+		// non-static, it's a ctor that does not start with `init`
+		[Export ("movieWithTimeRange:error:")]
+		IntPtr Constructor (QTTimeRange range, out NSError error);
 
 //		[Export ("initToWritableFile:error:")]
 //		IntPtr Constructor (string filename, out NSError error);
@@ -933,7 +942,7 @@ namespace MonoMac.QTKit
 		bool Muted { get; set; }
 		
 		[Export ("movieAttributes")]
-		NSDictionary MovieAttributes { get; }
+		NSDictionary MovieAttributes { get; set; }
 
 		[Export ("attributeForKey:")]
 		NSObject GetAttribute (string attributeKey);
@@ -1353,6 +1362,7 @@ namespace MonoMac.QTKit
 
 	
 	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor] // invalid handle returned
 	interface QTSampleBuffer {
 		[Export ("bytesForAllSamples")]
 		IntPtr BytesForAllSamples { get; }

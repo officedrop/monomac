@@ -1,6 +1,7 @@
 MDTOOL=/Applications/MonoDevelop.app/Contents/MacOS/mdtool
 
 XDIRS = \
+	NSAlert					\
 	AnimatingViews 				\
 	ButtonMadness 				\
 	CAQuartzComposition 			\
@@ -48,7 +49,6 @@ XDIRS = \
 	SearchField 				\
 	SkinnableApp				\
 	StillMotion				\
-	TwoMinuteGrowler			\
 	VillainTracker 				\
 	WhereIsMyMac
 

@@ -29,6 +29,12 @@ CORE_SOURCES =	$(EXTRA_CORE_SOURCES)			\
 	./ObjCRuntime/Runtime.cs			\
 	./ObjCRuntime/RequiredFrameworkAttribute.cs	\
 	./ObjCRuntime/Selector.cs			\
+	./OpenGL/OpenTK/Math/Quaternion.cs		\
+	./OpenGL/OpenTK/Math/MathHelper.cs		\
+	./OpenGL/OpenTK/Math/Matrix4.cs			\
+	./OpenGL/OpenTK/Math/Vector2.cs			\
+	./OpenGL/OpenTK/Math/Vector3.cs			\
+	./OpenGL/OpenTK/Math/Vector4.cs			\
 	./PdfKit/Enums.cs				\
 	./QTKit/Defs.cs					\
 	./QTKit/Enums.cs				\
@@ -41,20 +47,24 @@ CORE_SOURCES =	$(EXTRA_CORE_SOURCES)			\
 # Sources that are not part of CORE_SOURCES or the generated templates
 MONOMAC_SOURCES = $(EXTRA_MONOMAC_SOURCES) \
 	./Foundation/NSObjectMac.cs			\
-	./Foundation/NSSearchPath.cs		\
 	./AppKit/AppKitSynchronizationContext.cs	\
 	./AppKit/ActionDispatcher.cs			\
 	./AppKit/BeginSheet.cs				\
 	./AppKit/DoubleWrapper.cs			\
 	./AppKit/Functions.cs				\
+	./AppKit/NSAlert.cs				\
 	./AppKit/NSActionCell.cs			\
 	./AppKit/NSApplication.cs			\
 	./AppKit/NSApplicationDelegate.cs		\
-	./AppKit/NSBitmapImageRep.cs			\
-	./AppKit/NSButton.cs				\
+	./AppKit/NSArrayController.cs			\
 	./AppKit/NSBezierPath.cs			\
+	./AppKit/NSBitmapImageRep.cs			\
+	./AppKit/NSBrowser.cs				\
+	./AppKit/NSButton.cs				\
+	./AppKit/NSCell.cs				\
 	./AppKit/NSColor.cs				\
 	./AppKit/NSControl.cs				\
+	./AppKit/NSDocument.cs				\
 	./AppKit/NSEvent.cs				\
 	./AppKit/NSGradient.cs				\
 	./AppKit/NSGraphics.cs				\
@@ -68,12 +78,17 @@ MONOMAC_SOURCES = $(EXTRA_MONOMAC_SOURCES) \
 	./AppKit/NSOpenGLPixelFormat.cs			\
 	./AppKit/NSPopUpButton.cs			\
 	./AppKit/NSPopUpButtonCell.cs			\
+	./AppKit/NSScreen.cs				\
 	./AppKit/NSSharingService.cs			\
 	./AppKit/NSSegmentedControl.cs			\
+	./AppKit/NSSpeechSynthesizer.cs			\
+	./AppKit/NSSpellChecker.cs			\
+	./AppKit/NSSound.cs				\
 	./AppKit/NSTableView.cs				\
-	./AppKit/NSWindow.cs				\
+        ./AppKit/NSToolbarItem.cs                       \
+	./AppKit/NSTreeController.cs			\
+        ./AppKit/NSWindow.cs				\
 	./CoreVideo/CVDisplayLink.cs			\
-	./Growl/Constants.cs				\
 	./QTKit/QTCaptureDevice.cs			\
 	./QTKit/QTMovie.cs				\
 	./WebKit/DomNode.cs				\
@@ -104,19 +119,13 @@ OPENTK_SOURCES = \
 	./OpenGL/OpenTK/Audio/OpenAL/Alc/AlcEnums.cs	\
 	./OpenGL/OpenTK/Audio/OpenAL/Alc/Alc.cs	\
 	./OpenGL/OpenTK/Math/Half.cs			\
-	./OpenGL/OpenTK/Math/MathHelper.cs		\
 	./OpenGL/OpenTK/Math/Matrix3d.cs		\
-	./OpenGL/OpenTK/Math/Matrix4.cs			\
 	./OpenGL/OpenTK/Math/Matrix4d.cs		\
-	./OpenGL/OpenTK/Math/Quaternion.cs		\
 	./OpenGL/OpenTK/Math/Quaterniond.cs		\
-	./OpenGL/OpenTK/Math/Vector2.cs			\
 	./OpenGL/OpenTK/Math/Vector2d.cs		\
 	./OpenGL/OpenTK/Math/Vector2h.cs		\
-	./OpenGL/OpenTK/Math/Vector3.cs			\
 	./OpenGL/OpenTK/Math/Vector3d.cs		\
 	./OpenGL/OpenTK/Math/Vector3h.cs		\
-	./OpenGL/OpenTK/Math/Vector4.cs			\
 	./OpenGL/OpenTK/Math/Vector4d.cs		\
 	./OpenGL/OpenTK/Math/Vector4h.cs
 
@@ -138,10 +147,14 @@ SOURCES = \
 
 DEFINES = -define:NET_2_0
 
-HAVE_ASYNC=`if pkg-config --atleast-version=2.11 mono; then echo true; else echo false; fi`
+HAVE_ASYNC := $(shell if pkg-config --atleast-version=2.11 mono; then echo true; else echo false; fi)
 
 ifeq ($(HAVE_ASYNC),true)
 	ASYNC_TARGETS = MonoMac.CFNetwork.dll
+	UPDATE_FILES = MonoMac.dll* MonoMac.CFNetwork.dll*
+else
+	ASYNC_TARGETS = 
+	UPDATE_FILES = MonoMac.dll*
 endif
 
 TARGETS = _bmac.exe $(TARGET) parse.exe bmac.exe $(ASYNC_TARGETS)
@@ -171,7 +184,6 @@ APIS = \
 	appkit.cs		\
 	corewlan.cs		\
 	foundation-desktop.cs 	\
-	growl.cs		\
 	imagekit.cs		\
 	qtkit.cs		\
 	pdfkit.cs		\
@@ -187,13 +199,13 @@ parse.exe: parse.cs $(MACCORE_DIR)/src/Options.cs
 	gmcs -debug parse.cs $(MACCORE_DIR)/src/Options.cs
 
 core.dll: $(CORE_SOURCES) $(SHARED_CORE_SOURCES) Makefile
-	gmcs -target:library -debug -unsafe -out:core.dll -define:MONOMAC,MONOMAC_BOOTSTRAP,COREBUILD $(CORE_SOURCES) $(SHARED_CORE_SOURCES) -r:System.Drawing
+	gmcs -target:library -debug -unsafe -out:core.dll -define:MONOMAC,MONOMAC_BOOTSTRAP,COREBUILD$(CORE_DLL_DEFINES) $(CORE_SOURCES) $(SHARED_CORE_SOURCES) -r:System.Drawing
 
 _bmac.exe: $(APIS) core.dll $(GENERATOR_SOURCES)
 	gmcs -unsafe -out:_bmac.exe -debug $(DEFINES) -define:GENERATOR,MONOMAC,MONOMAC_BOOTSTRAP $(GENERATOR_SOURCES) -r:core.dll -r:System.Drawing
 
 generated_sources: _bmac.exe $(APIS) 
-	mono --debug _bmac.exe -a -d=MONOMAC --core --sourceonly=generated_sources -v -tmpdir=. $(APIS) --baselib=core.dll --ns=MonoMac.ObjCRuntime -r=System.Drawing
+	mono --debug _bmac.exe -a -d=MONOMAC $(BMAC_DEFINES) --core --sourceonly=generated_sources -v -tmpdir=. $(APIS) --baselib=core.dll --ns=MonoMac.ObjCRuntime -r=System.Drawing
 
 bmac.exe: $(TARGET) $(GENERATOR_SOURCES)
 	gmcs -unsafe -out:bmac.exe -debug $(DEFINES) -define:GENERATOR,MONOMAC,MONOMAC_BOOTSTRAP $(GENERATOR_SOURCES) -r:$(TARGET) -r:System.Drawing
@@ -213,20 +225,20 @@ MonoMac.CFNetwork.dll: $(CFNETWORK_SOURCES)
 clean:
 	rm -f $(TARGETS) core.dll
 
-all: $(TARGET)
-
-update: MonoMac.dll
-	cp MonoMac.dll* /Applications/MonoDevelop.app/Contents/MacOS/lib/monodevelop/Addins
-	cp MonoMac.dll* /Applications/MonoDevelop.app/Contents/MacOS/lib/monodevelop/Addins/MonoDevelop.MonoMac
+all: $(TARGET) $(ASYNC_TARGETS)
+	
+update: MonoMac.dll $(ASYNC_TARGETS)
+	cp $(UPDATE_FILES) /Applications/MonoDevelop.app/Contents/MacOS/lib/monodevelop/Addins
+	cp $(UPDATE_FILES) /Applications/MonoDevelop.app/Contents/MacOS/lib/monodevelop/Addins/MonoDevelop.MonoMac
 
 #
 # Pushes this to the MonoDevelop source code repo
 #
 push-to-monodevelop: MonoMac.dll
-	cp MonoMac.dll* /cvs/md/monodevelop/extras/MonoDevelop.MonoMac/MonoDevelop.MonoMac
+	cp $(UPDATE_FILES) /cvs/md/monodevelop/extras/MonoDevelop.MonoMac/MonoDevelop.MonoMac
 
 #
 # Pushes the assembly to the system MonoDevelop, for testing
 #
 upgrade-monodevelop: MonoMac.dll
-	cp MonoMac.dll* /Applications/MonoDevelop.app/Contents/MacOS//lib/monodevelop/AddIns/MonoDevelop.MonoMac/
+	cp $(UPDATE_FILES) /Applications/MonoDevelop.app/Contents/MacOS//lib/monodevelop/AddIns/MonoDevelop.MonoMac/

@@ -3,9 +3,13 @@
 #
 SHARED_SOURCE = \
 	./AudioToolbox/AudioBufferList.cs		\
+	./AudioToolbox/AudioBuffers.cs			\
+	./AudioToolbox/AudioClassDescription.cs		\
+	./AudioToolbox/AudioConverter.cs		\
 	./AudioToolbox/AudioFile.cs			\
+	./AudioToolbox/AudioFileGlobalInfo.cs   	\
 	./AudioToolbox/AudioFileStream.cs		\
-	./AudioToolbox/AudioFormat.cs			\
+	./AudioToolbox/AudioFormatAvailability.cs	\
 	./AudioToolbox/AudioQueue.cs			\
 	./AudioToolbox/AudioServices.cs			\
 	./AudioToolbox/AudioSession.cs			\
@@ -39,6 +43,7 @@ SHARED_SOURCE = \
 	./CoreAnimation/CADefs.cs			\
 	./CoreAnimation/CALayer.cs			\
 	./CoreAnimation/CATextLayer.cs			\
+	./CoreAnimation/CAMediaTimingFunction.cs	\
 	./CoreFoundation/CFArray.cs                     \
 	./CoreFoundation/CFBoolean.cs                   \
 	./CoreFoundation/CFDictionary.cs                \
@@ -57,6 +62,9 @@ SHARED_SOURCE = \
 	./CoreGraphics/CGPDFDictionary.cs		\
 	./CoreGraphics/CGShading.cs			\
 	./CoreImage/CIContext.cs			\
+	./CoreImage/CIDetector.cs			\
+	./CoreImage/CIFilter.cs				\
+	./CoreImage/CIImage.cs				\
 	./CoreImage/CISampler.cs			\
 	./CoreImage/CIVector.cs				\
 	./CoreLocation/CoreLocation2.cs			\
@@ -89,6 +97,7 @@ SHARED_SOURCE = \
 	./Foundation/NSAutoreleasePool.cs		\
 	./Foundation/NSArray.cs				\
 	./Foundation/NSBundle.cs			\
+	./Foundation/NSCalendar.cs			\
 	./Foundation/NSCoder.cs				\
 	./Foundation/NSData.cs				\
 	./Foundation/NSDate.cs				\
@@ -111,10 +120,13 @@ SHARED_SOURCE = \
 	./Foundation/NSNumber2.cs			\
 	./Foundation/NSObject2.cs			\
 	./Foundation/NSOutputStream.cs			\
+	./Foundation/NSPropertyListSerialization.cs	\
 	./Foundation/NSRunLoop.cs			\
+	./Foundation/NSSearchPath.cs		\
 	./Foundation/NSSet.cs				\
 	./Foundation/NSStream.cs			\
 	./Foundation/NSString2.cs			\
+	./Foundation/NSThread.cs			\
 	./Foundation/NSTimer.cs				\
 	./Foundation/NSUrl.cs				\
 	./Foundation/NSUrlConnection.cs			\
@@ -140,6 +152,7 @@ SHARED_CORE_SOURCE = \
 	./AVFoundation/AVAudioSettings.cs			\
 	./AVFoundation/AVUrlAssetOptions.cs	\
 	./AVFoundation/AVVideoSettings.cs			\
+	./AudioToolbox/AudioFormat.cs			\
 	./AudioToolbox/AudioType.cs			\
 	./CoreAnimation/CATransform3D.cs		\
 	./CoreAnimation/CAEnums.cs			\
@@ -149,6 +162,7 @@ SHARED_CORE_SOURCE = \
 	./CoreFoundation/CFUrl.cs                       \
 	./CoreFoundation/CFRunLoop.cs                   \
 	./CoreFoundation/Dispatch.cs                    \
+	./CoreFoundation/DispatchQueueSynchronizationContext.cs  \
 	./CoreFoundation/CFData.cs			\
 	./CoreFoundation/CFDataBuffer.cs		\
 	./CoreFoundation/CFIndex.cs			\
@@ -191,6 +205,7 @@ SHARED_CORE_SOURCE = \
 	./CoreVideo/CVPixelBufferPoolSettings.cs	\
 	./CoreVideo/CVPixelFormatDescription.cs		\
 	./CoreVideo/CVPixelBufferAttributes.cs	\
+	./Foundation/AdviceAttribute.cs			\
 	./Foundation/ConnectAttribute.cs		\
 	./Foundation/Enum.cs 				\
 	./Foundation/DictionaryContainer.cs		\
@@ -202,6 +217,7 @@ SHARED_CORE_SOURCE = \
 	./Foundation/NSString.cs			\
 	./Foundation/RegisterAttribute.cs		\
 	./Foundation/PreserveAttribute.cs		\
+	./Foundation/LinkerSafeAttribute.cs		\
         ./ObjCRuntime/AdoptsAttribute.cs               	\
         ./ObjCRuntime/ArgumentSemantic.cs               \
         ./ObjCRuntime/AlphaAttribute.cs                 \
