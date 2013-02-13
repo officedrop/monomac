@@ -3540,7 +3540,7 @@ namespace MonoMac.AppKit {
 	public delegate void NSDocumentCompletionHandler (IntPtr nsErrorPointerOrZero);
 	
 	[BaseType (typeof (NSObject))]
-	public interface NSDocument {
+	public partial interface NSDocument {
 		[Export ("initWithType:error:")]
 		IntPtr Constructor (string typeName, out NSError outError);
 
@@ -3860,7 +3860,7 @@ namespace MonoMac.AppKit {
 		string CurrentDirectory { get; }
 
 		[Export ("documentForURL:")]
-		NSDocument DocumentForUrl (NSUrl absoluteUrl);
+		NSDocument DocumentForUrl (NSUrl url);
 
 		[Export ("documentForWindow:")]
 		NSDocument DocumentForWindow (NSWindow window);
@@ -3890,20 +3890,20 @@ namespace MonoMac.AppKit {
 		int RunModalOpenPanelforTypes (NSOpenPanel openPanel, string [] types);
 
 		[Export ("openDocumentWithContentsOfURL:display:error:")]
-		NSObject OpenDocument (NSUrl absoluteUrl, bool displayDocument, out NSError outError);
+		NSObject OpenDocument (NSUrl url, bool displayDocument, out NSError outError);
 
 		[Lion]
 		[Export ("openDocumentWithContentsOfURL:display:completionHandler:")]
 		void OpenDocument (NSUrl url, bool display, OpenDocumentCompletionHandler completionHandler);
 
 		[Export ("makeDocumentWithContentsOfURL:ofType:error:")]
-		NSObject MakeDocument (NSUrl absoluteUrl, string typeName, out NSError outError);
+		NSObject MakeDocument (NSUrl url, string typeName, out NSError outError);
 
 		[Export ("reopenDocumentForURL:withContentsOfURL:error:")]
-		bool ReopenDocument (NSUrl absoluteDocumentUrl, NSUrl absoluteDocumentContentsUrl, out NSError outError);
+		bool ReopenDocument (NSUrl url, NSUrl contentsUrl, out NSError outError);
 
 		[Export ("makeDocumentForURL:withContentsOfURL:ofType:error:")]
-		NSObject MakeDocument (NSUrl absoluteDocumentUrl, NSUrl absoluteDocumentContentsUrl, string typeName, out NSError outError);
+		NSObject MakeDocument ([NullAllowed] NSUrl urlOrNil, NSUrl contentsUrl, string typeName, out NSError outError);
 
 		[Export ("saveAllDocuments:")]
 		void SaveAllDocuments ([NullAllowed] NSObject sender);
@@ -3936,7 +3936,7 @@ namespace MonoMac.AppKit {
 		void NoteNewRecentDocument (NSDocument document);
 
 		[Export ("noteNewRecentDocumentURL:")]
-		void NoteNewRecentDocumentURL (NSUrl absoluteUrl);
+		void NoteNewRecentDocumentURL (NSUrl url);
 
 		[Export ("recentDocumentURLs")]
 		NSUrl [] RecentDocumentUrls { get; }
@@ -3945,7 +3945,7 @@ namespace MonoMac.AppKit {
 		string DefaultType { get; }
 
 		[Export ("typeForContentsOfURL:error:")]
-		string TypeForUrl (NSUrl inAbsoluteUrl, out NSError outError);
+		string TypeForUrl (NSUrl url, out NSError outError);
 
 		[Export ("documentClassNames")]
 		string [] DocumentClassNames  {get; }
@@ -6149,19 +6149,19 @@ namespace MonoMac.AppKit {
 		bool IsExpandable (NSObject item);
 
 		[Export ("expandItem:expandChildren:")]
-		void ExpandItem (NSObject item, bool expandChildren);
+		void ExpandItem ([NullAllowed] NSObject item, bool expandChildren);
 
 		[Export ("expandItem:")]
 		void ExpandItem (NSObject item);
 
 		[Export ("collapseItem:collapseChildren:")]
-		void CollapseItem (NSObject item, bool collapseChildren);
+		void CollapseItem ([NullAllowed] NSObject item, bool collapseChildren);
 
 		[Export ("collapseItem:")]
 		void CollapseItem (NSObject item);
 
 		[Export ("reloadItem:reloadChildren:")]
-		void ReloadItem (NSObject item, bool reloadChildren);
+		void ReloadItem ([NullAllowed] NSObject item, bool reloadChildren);
 
 		[Export ("reloadItem:")]
 		void ReloadItem (NSObject item);
@@ -6176,7 +6176,7 @@ namespace MonoMac.AppKit {
 		int RowForItem (NSObject item);
 
 		[Export ("levelForItem:")]
-		int LevelForItem (NSObject item);
+		int LevelForItem ([NullAllowed] NSObject item);
 
 		[Export ("levelForRow:")]
 		int LevelForRow (int row);
@@ -10213,7 +10213,7 @@ namespace MonoMac.AppKit {
 
 	[Lion]
 	[Model]
-	interface NSTextFinderClient {
+	partial interface NSTextFinderClient {
 		[Abstract]
 		[Export ("allowsMultipleSelection")]
 		bool AllowsMultipleSelection { get;  }
@@ -10279,7 +10279,7 @@ namespace MonoMac.AppKit {
 		void DrawCharactersInRangeforContentView (NSRange range, NSView view);
 	}
 
- 	public interface NSTextFinderBarContainer {
+ 	public partial interface NSTextFinderBarContainer {
 		[Abstract, Export ("findBarVisible"), Lion]
 		bool FindBarVisible { [Bind ("isFindBarVisible")] get; set;  }
 
@@ -11108,8 +11108,11 @@ namespace MonoMac.AppKit {
 	}
 
 	[BaseType (typeof (NSObject))]
-	public partial interface NSTableColumn {
-		[Export ("initWithIdentifier:")]
+	public partial interface NSTableColumn : NSUserInterfaceItemIdentification {
+		[Lion, Export ("initWithIdentifier:")]
+		IntPtr Constructor (string identifier);
+
+		[Obsolete, Export ("initWithIdentifier:")]
 		IntPtr Constructor (NSObject identifier);
 	
 		[Export ("dataCellForRow:")]
@@ -11117,10 +11120,6 @@ namespace MonoMac.AppKit {
 		
 		[Export ("sizeToFit")]
 		void SizeToFit ();
-
-		//Detected properties
-		[Export ("identifier")]
-		NSObject Identifier { get; set; }
 		
 		[Export ("tableView")]
 		NSTableView TableView { get; set; }
@@ -11234,6 +11233,11 @@ namespace MonoMac.AppKit {
 		[Export ("textField", ArgumentSemantic.Assign)]
 		NSTextField TextField {
 			get; set;
+		}
+
+		[Export ("draggingImageComponents", ArgumentSemantic.Retain)]
+		NSArray DraggingImageComponents {
+			get;
 		}
 	}
 
@@ -13151,7 +13155,7 @@ namespace MonoMac.AppKit {
 
 	[BaseType (typeof (NSTextDelegate))]
 	[Model]
-	public interface NSTextViewDelegate {
+	public partial interface NSTextViewDelegate {
 		[Export ("textView:clickedOnLink:atIndex:"), DelegateName ("NSTextViewLink"), DefaultValue (false)]
 		bool LinkClicked (NSTextView textView, NSObject link, uint charIndex);
 
@@ -13492,7 +13496,7 @@ namespace MonoMac.AppKit {
 	[BaseType (typeof (NSObject))]
 	public interface NSTrackingArea {
 		[Export ("initWithRect:options:owner:userInfo:")]
-		IntPtr Constructor (RectangleF rect, NSTrackingAreaOptions options, NSObject owner, NSDictionary userInfo);
+		IntPtr Constructor (RectangleF rect, NSTrackingAreaOptions options, NSObject owner, [NullAllowed] NSDictionary userInfo);
 		
 		[Export ("rect")]
 		RectangleF Rect { get; }
