@@ -42,7 +42,8 @@ CORE_SOURCES =	$(EXTRA_CORE_SOURCES)			\
 	./OpenGL/CGLContext.cs				\
 	./OpenGL/CGLPixelFormat.cs			\
 	./ScriptingBridge/Enums.cs			\
-	./WebKit/Enums.cs
+	./WebKit/Enums.cs                   \
+	./StoreKit/Constants.cs
 
 # Sources that are not part of CORE_SOURCES or the generated templates
 MONOMAC_SOURCES = $(EXTRA_MONOMAC_SOURCES) \
@@ -190,7 +191,9 @@ APIS = \
 	webkit.cs		\
 	composer.cs		\
 	scriptingbridge.cs		\
+	growl.cs                \
 	sparkle.cs              \
+	storekit.cs             \
 	$(SHARED_APIS) $(EXTRA_APIS)
 
 all: $(TARGETS)

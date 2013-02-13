@@ -1,5 +1,5 @@
 //
-// growl.cs: Definitions for the Growl Framework
+// sparkle.cs: Definitions for the Sparkle Framework
 //
 using System;
 using MonoMac.Foundation;
