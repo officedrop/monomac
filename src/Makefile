@@ -246,3 +246,6 @@ push-to-monodevelop: MonoMac.dll
 #
 upgrade-monodevelop: MonoMac.dll
 	cp $(UPDATE_FILES) /Applications/MonoDevelop.app/Contents/MacOS//lib/monodevelop/AddIns/MonoDevelop.MonoMac/
+
+update-sync: MonoMac.dll
+	cp $(UPDATE_FILES) ~/projects/mono/winclient/thirdparty

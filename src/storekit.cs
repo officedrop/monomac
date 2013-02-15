@@ -45,11 +45,14 @@ namespace MonoMac.StoreKit {
 
 		[Export("canMakePayments")]
 		[Static]
-		bool CanMakePayments();
+		bool CanMakePayments { get; }
 
 		[Export("defaultQueue")]
 		[Static]
-		SKPaymentQueue DefaultQueue { [Bind("defaultQueue")] get;}
+		SKPaymentQueue DefaultQueue { get;}
+
+		[Export("transactions")]
+		SKPaymentTransaction Transactions { get; }
 
 		[Export("addPayment:")]
 		void AddPayment( SKPayment payment );
@@ -77,26 +80,29 @@ namespace MonoMac.StoreKit {
 	[BaseType (typeof (NSObject))]
 	interface SKPaymentTransaction {
 
-		[Export("downloads")]
-		SKDownload[] Downloads { get; }
-
 		[Export("error")]
 		NSError Error { get; }
-
-		[Export("originalTransaction")]
-		SKPaymentTransaction OriginalTransaction { get; }
 
 		[Export("payment")]
 		SKPayment Payment {get;}
 
-		[Export("transactionDate")]
-		NSDate TransactionDate { get; }
+		[Export("transactionState")]
+		SKPaymentTransactionStates TransactionState {get;}
 
 		[Export("transactionIdentifier")]
 		string TransactionIdentifier {get;}
 
-		[Export("transactionState")]
-		SKPaymentTransactionStates TransactionState {get;}
+		[Export("transactionReceipt")]
+		NSData TransactionReceipt { get; }
+
+		[Export("transactionDate")]
+		NSDate TransactionDate { get; }
+
+		[Export("downloads")]
+		SKDownload[] Downloads { get; }
+
+		[Export("originalTransaction")]
+		SKPaymentTransaction OriginalTransaction { get; }
 
 	}
 

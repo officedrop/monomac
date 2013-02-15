@@ -57,5 +57,6 @@ namespace MonoMac {
 		public const string QuickLookLibrary = "/System/Library/Frameworks/QuickLook.framework/QuickLook";
 		public const string AVFoundationLibrary = "/System/Library/Frameworks/AVFoundation.framework/AVFoundation";
 		public const string LaunchServicesLibrary = "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/LaunchServices";
+		public const string StoreKitLibrary = "/System/Library/Frameworks/StoreKit.framework/StoreKit";
     }
 }
