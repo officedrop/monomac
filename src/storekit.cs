@@ -72,7 +72,7 @@ namespace MonoMac.StoreKit {
 		[Export("removeTransactionObserver:")]
 		void RemoveTransactionObserver( NSObject observer );
 
-		[Export("restoreCompletedTransactions:")]
+		[Export("restoreCompletedTransactions")]
 		void RestoreCompletedTransactions();
 
 	}
