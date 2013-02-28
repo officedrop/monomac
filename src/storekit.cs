@@ -92,9 +92,6 @@ namespace MonoMac.StoreKit {
 		[Export("transactionIdentifier")]
 		string TransactionIdentifier {get;}
 
-		[Export("transactionReceipt")]
-		NSData TransactionReceipt { get; }
-
 		[Export("transactionDate")]
 		NSDate TransactionDate { get; }
 
