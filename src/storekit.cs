@@ -52,7 +52,7 @@ namespace MonoMac.StoreKit {
 		SKPaymentQueue DefaultQueue { get;}
 
 		[Export("transactions")]
-		SKPaymentTransaction Transactions { get; }
+		SKPaymentTransaction[] Transactions { get; }
 
 		[Export("addPayment:")]
 		void AddPayment( SKPayment payment );
